@@ -1,6 +1,6 @@
 package models;
 
-public class OnlineCourse extends Course{
+public class OnlineCourse extends Course {
 
     private String platform;
 
@@ -20,10 +20,10 @@ public class OnlineCourse extends Course{
     @Override
     public String toString() {
         return "Course{" +
-                "courseName='" + courseName + '\'' +
-                ", courseCode='" + courseCode + '\'' +
-                ", credits=" + credits +
+                "courseName='" + getCourseName() + '\'' +
+                ", courseCode='" + getCourseCode() + '\'' +
+                ", credits=" + getCredits() +
+                ", platform='" + platform + '\'' +
                 '}';
     }
-
 }

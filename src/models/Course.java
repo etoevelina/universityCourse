@@ -7,6 +7,9 @@ public abstract class Course {
     private String courseCode;
     private int credits;
 
+    // Добавление конструктора по умолчанию
+    public Course() {}
+
     public Course(String courseName, String courseCode, int credits) {
         this.courseName = courseName;
         this.courseCode = courseCode;
