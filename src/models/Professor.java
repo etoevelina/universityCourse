@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class Professor {
     private String name;
     private String department;
@@ -38,6 +40,8 @@ public class Professor {
 //    public void displayProfessorInfo() {
 //        System.out.println("Name: " + name + ", Department: " + department + ", Experience: " + experience + " years");
 //    }
+
+
 
 
     @Override

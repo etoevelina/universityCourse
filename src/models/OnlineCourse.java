@@ -26,4 +26,5 @@ public class OnlineCourse extends Course {
                 ", platform='" + platform + '\'' +
                 '}';
     }
+
 }
