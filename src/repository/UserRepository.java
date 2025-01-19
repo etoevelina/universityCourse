@@ -18,6 +18,10 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public boolean createUser(User user) {
+        if (getUser(user.getLogin()) != null) {
+            System.out.println("User with this login already exists.");
+            return false;
+        }
         String sql = "INSERT INTO students(student_login, student_password) VALUES (?, ?)";
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
@@ -57,20 +61,22 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User getUser(int id) {
-        String sql = "SELECT student_id, student_login, student_password FROM students WHERE student_id=?";
+    public User getUser(String login) {
+        String sql = "SELECT student_id, student_login, student_password, token FROM students WHERE student_login=?";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
-            st.setInt(1, id);
+        //    st.setInt(1, id);
+            st.setString(1,login);
 
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     return new User(
                             rs.getInt("student_id"),
                             rs.getString("student_login"),
-                            rs.getString("student_password")
+                            rs.getString("student_password"),
+                            rs.getString("token")
                     );
                 }
             }
@@ -79,5 +85,60 @@ public class UserRepository implements IUserRepository {
         }
 
         return null;
+    }
+    @Override
+    public boolean deleteUserByLogin(String login) {
+        String sql = "DELETE FROM students WHERE student_login=?";
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setString(1, login);
+            int affectedRows = st.executeUpdate();
+
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.err.println("SQL error in deleteUserByLogin: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteUser(String login) {
+        return deleteUserByLogin(login);
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        String sql = "UPDATE students SET student_login=?, student_password=? WHERE student_id=?";
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setString(1, user.getLogin());
+            st.setString(2, user.getPassword());
+            st.setInt(3, user.getId());
+
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.err.println("SQL error in updateUser: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean createToken(String token, String login) {
+        String sql = "UPDATE students SET token=? WHERE student_login=?";
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setString(1, token);
+            st.setString(2, login);
+
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.err.println("SQL error in createToken: " + e.getMessage());
+        }
+        return false;
     }
 }

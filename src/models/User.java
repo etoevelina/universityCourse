@@ -4,9 +4,18 @@ public class User {
     private int id;
     private String login;
     private String password;
+    private String token;
 
     public User() {
+    }
 
+    public String getToken() {
+       // System.out.println(token);
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public User(String login, String password) {
@@ -18,6 +27,18 @@ public class User {
         this.id = id;
         this.login = login;
         this.password = password;
+    }
+    public User(int id, String login, String password, String token) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.token = token;
+    }
+
+
+    public User(int id, String login) {
+        this.id = id;
+        this.login = login;
     }
 
     public int getId() {
@@ -50,7 +71,8 @@ public class User {
         this.password = password;
     }
 
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", login='" + login + "' }";
+    }
 }
